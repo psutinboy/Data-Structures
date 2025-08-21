@@ -1,7 +1,14 @@
 
 
 // Dynamic Array Stack (holds doubles)
-// Resizing policy: start capacity=8; on push if full -> double with realloc
+// 
+// RESIZING POLICY:
+// - Initial capacity: 8 elements
+// - Expansion: When push() is called and stack is at capacity, the array
+//   is doubled in size using realloc() before adding the new element
+// - Shrinking: Currently no shrinking is implemented (array maintains
+//   its maximum reached capacity throughout the stack's lifetime)
+// - Memory management: All memory is freed when destroyStack() is called
 
 
 #include <stdio.h>
@@ -56,38 +63,44 @@ static int grow(ArrStack *this) {
 
 void push(ArrStack *this, double value)
 {
+	if (!this) return;
+	if (this->top + 1 == this->capacity) {
+		if (!grow(this)) {
+			printf("Memory allocation failed during push.\n");
+			return;
+		}
+	}
 	this->top++;
-	this->stack[this->top] = data;
+	this->data[this->top] = value;
 }
 
 double pop(ArrStack *this)
 {
-	if(isEmpty(this))
+	if(!this || this->top == -1)
 	{
 		printf("Empty stack, pop failed!\n");
-		return '\0';
+		return 0.0;
 	}
 
-	char data = this->stack[this->top];
+	double value = this->data[this->top];
 	this->top--;
-	return data;
+	return value;
 }
 
 double peek(ArrStack *this)
 {
-	if(this->top == -1)
+	if(!this || this->top == -1)
 	{
 		printf("Empty stack, peek failed!\n");
-		return '\0';
+		return 0.0;
 	}
 
-	char data = this->stack[this->top];
-	return data;
+	return this->data[this->top];
 }
 
 void print(ArrStack *this)
 {
-	if(this->top == -1)
+	if(!this || this->top == -1)
 	{
 		printf("Empty stack, nothing to print\n");
 		return;
@@ -96,7 +109,7 @@ void print(ArrStack *this)
 	printf("*****\n");
 	for (int i = 0; i <= this->top; i++)
 	{
-		printf("%c \n", this->stack[i]);
+		printf("%lf \n", this->data[i]);
 	}
 	printf("*****\n");
 }
@@ -104,31 +117,28 @@ void print(ArrStack *this)
 int main()
 {
 	//testing
-	ArrStack *myStack = newStack();
-
-	push(myStack, 'a');
-	push(myStack, 'b');
-	push(myStack, 'c');
-	printf("%d\n", myStack->top);
-	print(myStack);
-	printf("%c\n", pop(myStack));
-	printf("%c\n", pop(myStack));
-	printf("%c\n", pop(myStack));
-	pop(myStack);
-	pop(myStack);
-	print(myStack);
-	push(myStack, 'x');
-	push(myStack, 'y');
-	push(myStack, 'z');
-	peek(myStack);
-	printf("%c\n", peek(myStack));
-	printf("%c\n", peek(myStack));
-	printf("%c\n", pop(myStack));
-	printf("%c\n", peek(myStack));
-	printf("%c\n", pop(myStack));
-	printf("%c\n", peek(myStack));
-	printf("%c\n", pop(myStack));
-	printf("%c\n", peek(myStack));;
-	destroyStack(myStack);
-	return 0;
+ArrStack *myStack = newStack();
+push(myStack, 3.4);
+push(myStack, 6.7);
+push(myStack, 6.7);
+print(myStack);
+printf("%lf\n", pop(myStack));
+printf("%lf\n", pop(myStack));
+printf("%lf\n", pop(myStack));
+pop(myStack);
+pop(myStack);
+print(myStack);
+push(myStack, 4.7);
+push(myStack, 2.45);
+push(myStack, 4.654);
+peek(myStack);
+printf("%lf\n", peek(myStack));
+printf("%lf\n", peek(myStack));
+printf("%lf\n", pop(myStack));
+printf("%lf\n", peek(myStack));
+printf("%lf\n", pop(myStack));
+printf("%lf\n", peek(myStack));
+printf("%lf\n", pop(myStack));
+printf("%lf\n", peek(myStack));;
+destroyStack(myStack);
 }
