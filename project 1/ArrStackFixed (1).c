@@ -1,39 +1,37 @@
 
 
-// Dynamic Array Stack (holds doubles)
-// Resizing policy: start capacity=8; on push if full -> double with realloc
+// Demonstrates stack abstract data structure with underlying array 
+// Array is fixed size (adjust MAX below)
 
 
 #include <stdio.h>
 #include <stdlib.h>
+#define MAX 100
 
 typedef struct ArrStack {
-	double *data;
+	char stack[MAX]; // max stack size is 100;
 	int top;
-	int capacity;
 } ArrStack;
 
 //initialize stack
 ArrStack *newStack()
 {
-	ArrStack *s = malloc(sizeof(ArrStack));
-	if (s == NULL) return NULL;
-	s-> capacity = 8;
-	s-> top = -1;
-	s-> data = malloc(sizeof(double) * s->capacity);
-	
-	if(s->data == NULL) {
-	    free(s);
+	ArrStack *new = malloc(sizeof(ArrStack));
+	if (new != NULL)
+	{
+	new->top = -1; //-1 signifies empty stack
+		return new;
+	}
+	else
+	{
+	    printf("Memory allocation for stack failed!");
 	    return NULL;
 	}
-	return s;
 }
 
 //destroy stack - free memory
 void destroyStack(ArrStack *this)
 {
-	if(!this) return;
-	free(this->data);
 	free(this);
 }
 
@@ -42,25 +40,25 @@ int isEmpty(ArrStack *this)
 	return (this->top == -1);
 }
 
-static int grow(ArrStack *this) {
-    int newCap = (this->capacity == 0) ? 8 : this->capacity * 2;
-    double *p = realloc(this->data, newCap * sizeof(double));
-    if (!p) {
-        printf("Memory allocation failed during grow.\n");
-        return 0;
-    }
-    this->data = p;
-    this->capacity = newCap;
-    return 1;
+int isFull(ArrStack *this)
+{
+	return (this->top == (MAX - 1));
 }
 
-void push(ArrStack *this, double value)
+
+void push(ArrStack *this, char data)
 {
+	if(isFull(this))
+	{
+		printf("Stack full, push failed!");
+		return;
+	}
+
 	this->top++;
 	this->stack[this->top] = data;
 }
 
-double pop(ArrStack *this)
+char pop(ArrStack *this)
 {
 	if(isEmpty(this))
 	{
@@ -73,7 +71,7 @@ double pop(ArrStack *this)
 	return data;
 }
 
-double peek(ArrStack *this)
+char peek(ArrStack *this)
 {
 	if(this->top == -1)
 	{
