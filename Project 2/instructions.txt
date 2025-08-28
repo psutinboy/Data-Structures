@@ -1,0 +1,4 @@
+Complete the code for the function void convertToPostfix() in ConvertPostFix.c
+You can assume that the user will input a valid infix mathematical expression
+Your code should handle the mathematical operations +,-,*,/,^
+
