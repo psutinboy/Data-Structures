@@ -30,14 +30,15 @@ char peek(ArrStack *this);
 void getUserInput();
 void convertToPostfix();
 int isLetter(char);
+int priority(char op);
 
 // for simplicity, I made infix string, postfix string, and length of infix all
 // global variables
-char infix[100];   // 100 is an arbitrary limit. Infix expression is limited to
-                   // 100 characters. In practice, not a serious concern.
+char infix[100]; // 100 is an arbitrary limit. Infix expression is limited to
+// 100 characters. In practice, not a serious concern.
 int length;        // this is length of INFIX
 char postfix[100]; // postfix will alwas be shorter than infix since parentheses
-                   // are dropped. Surely 100 is large enough.
+// are dropped. Surely 100 is large enough.
 
 int main() {
   getUserInput();
@@ -46,50 +47,75 @@ int main() {
   return 0;
 }
 
-void convertToPostfix() {
-  ArrStack *s = newStack();
-  int j = 0;
-  for (int i = 0; i < length; i++) {
-    char ch = infix[i];
-    if (ch == ' ' || ch == '\t')
-      continue;
+int priority(char op) // higher priority means do it first
+{
+  switch (op) {
+  case '^':
+    return 3;
+    break;
+  case '*':
+    return 2;
+    break;
+  case '/':
+    return 2;
+    break;
+  case '+':
+    return 1;
+    break;
+  case '-':
+    return 1;
+    break;
+  case '(':
+    return 0;
+    break;
+  default:
+    return 0;
+    break;
+  }
+}
 
-    if (isLetter(ch) || (ch >= '0' && ch <= '9')) {
-      postfix[j++] = ch;
-    } else if (ch == '(') {
-      push(s, ch);
-    } else if (ch == ')') {
-      while (!isEmpty(s) && peek(s) != '(') {
-        postfix[j++] = pop(s);
+void convertToPostfix() {
+  int i;
+  int j = 0; // j controls slot in postfix that we are modifying
+  char infixCh;
+  ArrStack *operatorSt = newStack();
+
+  for (i = 0; i < length; i++) {
+    infixCh = infix[i];
+    // if its a variable, append to postfix
+    if (isLetter(infixCh)) {
+      postfix[j] = infixCh;
+      j++; // increment
+    } else if (infixCh == '(') {
+      push(operatorSt, '(');
+    } else if (infixCh == ')') {
+      // Pop from stack to postfix until '(' is found
+      while (!isEmpty(operatorSt) && peek(operatorSt) != '(') {
+        postfix[j] = pop(operatorSt);
+        j++;
       }
-      if (!isEmpty(s) && peek(s) == '(')
-        pop(s);
-    } else {
-      // operator: + - * / ^
-      int pCur = (ch == '+' || ch == '-')   ? 1
-                 : (ch == '*' || ch == '/') ? 2
-                 : (ch == '^')              ? 3
-                                            : 0;
-      while (!isEmpty(s) && peek(s) != '(') {
-        char topOp = peek(s);
-        int pTop = (topOp == '+' || topOp == '-')   ? 1
-                   : (topOp == '*' || topOp == '/') ? 2
-                   : (topOp == '^')                 ? 3
-                                                    : 0;
-        if (pTop > pCur || (pTop == pCur && ch != '^')) {
-          postfix[j++] = pop(s);
-        } else {
-          break;
+      // discard '('
+      pop(operatorSt);
+    } else // its operator
+           // do all higher priority first
+    {
+      while (!isEmpty(operatorSt) &&
+             priority(infixCh) <= priority(peek(operatorSt))) {
+        if (infixCh == '^' && peek(operatorSt) == '^') {
+          break; // handle right associativity for '^'
         }
+        postfix[j] = pop(operatorSt);
+        j++;
       }
-      push(s, ch);
+      push(operatorSt, infixCh);
     }
   }
-  while (!isEmpty(s)) {
-    postfix[j++] = pop(s);
+  while (!isEmpty(operatorSt)) {
+    postfix[j] = pop(operatorSt);
+    j++;
   }
   postfix[j] = '\0';
-  destroyStack(s);
+  destroyStack(operatorSt);
 }
 
 int isLetter(char ch) // tells you if a character is a letter (varible) or not.

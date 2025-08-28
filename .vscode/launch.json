@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures",
-      "program": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/build/Debug/outDebug",
+      "cwd": "c:/Users/gtled/Desktop/Coding Practice/data structures/Data-Structures/Project 2",
+      "program": "c:/Users/gtled/Desktop/Coding Practice/data structures/Data-Structures/Project 2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
