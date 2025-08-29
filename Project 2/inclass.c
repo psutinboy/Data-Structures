@@ -101,7 +101,11 @@ void convertToPostfix() {
     {
       while (!isEmpty(operatorSt) &&
              priority(infixCh) <= priority(peek(operatorSt))) {
+        if (infixCh == '^' && peek(operatorSt) == '^') {
+          break; // handle right associativity for '^'
+        }
         postfix[j] = pop(operatorSt);
+        j++;
       }
       push(operatorSt, infixCh);
     }
@@ -110,7 +114,8 @@ void convertToPostfix() {
     postfix[j] = pop(operatorSt);
     j++;
   }
-  //
+  postfix[j] = '\0';
+  destroyStack(operatorSt);
 }
 
 int isLetter(char ch) // tells you if a character is a letter (varible) or not.
