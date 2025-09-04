@@ -1,0 +1,6 @@
+Using LinkStack.c as a model, implement a linked queue two different ways (sub-
+mit two .c code files)
+• The first way, implement a linked queue without a dummy node.
+• The second way, implement a linked queue using a dummy node.
+• In both situations make sure the linked queue can store data of any type by using
+void pointers.
