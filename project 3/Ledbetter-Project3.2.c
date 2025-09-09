@@ -6,43 +6,56 @@ typedef struct Node {
   void *data;
 } Node;
 
-typedef struct LinkStack {
-  Node *top;
-} LinkStack;
+typedef struct LinkQueue {
+  Node *head;
+  Node *tail;
+} LinkQueue;
 
 /*
 // function prototypes
 */
-LinkStack *newStack();
-int isEmpty(LinkStack *);
-void destroyStack(LinkStack *);
-void push(LinkStack *, void *);
-void *pop(LinkStack *);
-void *peek(LinkStack *);
+LinkQueue *newQueue();
+int isEmpty(LinkQueue *);
+void destroyQueue(LinkQueue *);
+void enqueue(LinkQueue *, void *);
+void *dequeue(LinkQueue *);
+void *peek(LinkQueue *);
 // end function prototpyes
 
 // initialize stack
-LinkStack *newStack() {
-  LinkStack *new = malloc(sizeof(LinkStack));
-  if (new != NULL) {
-    new->top = NULL; // signifies empty stack;
-    return new;
-  } else {
-    printf("Memory allocation for stack failed!");
+LinkQueue *newQueue() {
+  LinkQueue *q = malloc(sizeof(LinkQueue));
+  if (q == NULL) {
+    printf("Memory allocation for queue failed!");
     return NULL;
   }
+
+  Node *dummy = malloc(sizeof(Node));
+  if (dummy == NULL) {
+    printf("Memory allocation for dummy node failed!\n");
+    free(q);
+    return NULL;
+  }
+
+  dummy->next = NULL;
+  dummy->data = NULL;
+
+  q->head = dummy;
+  q->tail = dummy;
+  return q;
 }
 
-int isEmpty(LinkStack *this) { return (this->top == NULL); }
+int isEmpty(LinkQueue *this) { return (this->head->next == NULL); }
 
-void destroyStack(LinkStack *this) {
+void destroyQueue(LinkQueue *this) {
   while (!isEmpty(this)) {
-    pop(this);
+    dequeue(this);
   }
+  free(this->head);
   free(this);
 }
 
-void push(LinkStack *this, void *x) {
+void enqueue(LinkQueue *this, void *x) {
   Node *newNode = malloc(sizeof(Node));
 
   if (newNode == NULL) {
@@ -50,35 +63,39 @@ void push(LinkStack *this, void *x) {
     return;
   }
   newNode->data = x;
-  newNode->next = this->top;
-  this->top = newNode;
+  newNode->next = NULL;
+
+  this->tail->next = newNode;
+  this->tail = newNode;
 }
 
-void *pop(LinkStack *this) {
+void *dequeue(LinkQueue *this) {
   if (isEmpty(this)) {
-    printf("Empty stack, pop failed!\n");
+    printf("Empty queue, dequeue failed!\n");
     return NULL;
   }
 
-  Node *toRemove = this->top;
-  this->top = this->top->next;
-  void *x = toRemove->data;
-  free(toRemove);
+  Node *first = this->head->next;
+  this->head->next = first->next;
+  if (this->tail == first) {
+    this->tail = this->head;
+  }
+  void *x = first->data;
+  free(first);
   return x;
 }
 
-void *peek(LinkStack *this) {
+void *peek(LinkQueue *this) {
   if (isEmpty(this)) {
-    printf("Empty stack, pop failed!\n");
+    printf("Empty Queue, pop failed!\n");
     return NULL;
   }
 
-  void *x = this->top->data;
-  return x;
+  return this->head->next->data;
 }
 
-void printIntStack(LinkStack *this) {
-  Node *iterator = this->top;
+void printIntQueue(LinkQueue *this) {
+  Node *iterator = this->head->next;
 
   while (iterator != NULL) {
     printf("%d \n", *((int *)iterator->data));
@@ -88,34 +105,35 @@ void printIntStack(LinkStack *this) {
 
 int main() {
   // testing
-  LinkStack *myStack = newStack();
+  LinkQueue *myQueue = newQueue();
   int a = 5;
   int b = 7;
   int c = 9;
   int d = 1;
-  push(myStack, &a);
-  push(myStack, &b);
-  push(myStack, &c);
-  push(myStack, &d);
-
-  printf("%d \n", *((int *)pop(myStack)));
-  printf("%d \n", *((int *)pop(myStack)));
-  printf("%d \n", *((int *)pop(myStack)));
-  printf("%d \n", *((int *)pop(myStack)));
-  pop(myStack);
-  pop(myStack);
-
+  enqueue(myQueue, &a);
+  enqueue(myQueue, &b);
+  enqueue(myQueue, &c);
+  enqueue(myQueue, &d);
+  printIntQueue(myQueue);
+  printf("%d \n", *((int *)dequeue(myQueue)));
+  printf("%d \n", *((int *)dequeue(myQueue)));
+  printf("%d \n", *((int *)dequeue(myQueue)));
+  printIntQueue(myQueue);
+  printf("%d \n", *((int *)dequeue(myQueue)));
+  dequeue(myQueue);
+  dequeue(myQueue);
   char x = 'x';
   char y = 'y';
   char z = 'z';
-
-  push(myStack, &x);
-  push(myStack, &y);
-  push(myStack, &z);
-  printf("%c \n", *((char *)pop(myStack)));
-  printf("%c \n", *((char *)pop(myStack)));
-  printf("%c \n", *((char *)pop(myStack)));
-  pop(myStack);
-  pop(myStack);
+  enqueue(myQueue, &x);
+  enqueue(myQueue, &y);
+  enqueue(myQueue, &z);
+  printf("%c \n", *((char *)dequeue(myQueue)));
+  printf("%c \n", *((char *)dequeue(myQueue)));
+  printf("%c \n", *((char *)dequeue(myQueue)));
+  printf("%p", myQueue);
+  dequeue(myQueue);
+  dequeue(myQueue);
+  destroyQueue(myQueue);
   return 0;
 }
