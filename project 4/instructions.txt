@@ -1,0 +1,13 @@
+A period . character denotes a land tile, whereas a ^ character denotes a water tile.
+Given a starting row (row) and a starting column (col):
+• Function AreaR should calculate the area of the body of water associated to the
+location at (row, col) using recursion. A single tile of water contributes 1 to the
+area. If (row, col) is a land tile, the area returned should be 0.
+• Function AreaI should calculate the area using an iterative approach (that is, not
+using recursion) use queue for this.
+• For the contiguous body of water determined by the location (row, col), please
+change the ^ character to a # character in the map before displaying it.
+• Please note that if two ^ characters meet in a corner, this is not considered as
+contiguous for the purpose of this problem.
+
+dont change main at all. keep it as simple as possible.
