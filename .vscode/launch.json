@@ -8,13 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-<<<<<<< HEAD
-      "cwd": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Project 5",
-      "program": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Project 5/build/Debug/outDebug",
-=======
       "cwd": ".",
       "program": "build/Debug/outDebug",
->>>>>>> 5b3de0bbca3b5b8eeca632530528b7511fdf4c01
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
