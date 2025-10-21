@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Sorting algorithms",
-      "program": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Sorting algorithms/build/Debug/outDebug",
+      "cwd": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Project 7",
+      "program": "c:/Users/Grant Ledbetter/Desktop/coding/data structures/Data-Structures/Project 7/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

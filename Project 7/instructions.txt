@@ -1,0 +1,16 @@
+• Complete the code of the four functions in Ledbetter-Project7.c
+– mergeSort(ArrList *list)
+– ms(ArrList *list, int start, int end, int *aux)
+– quickSort(ArrList *list)
+– qs(ArrList *list, int start, int end)
+
+• Ensure your mergesort implementation uses as little auxiliary space as possible.
+• Ensure your quicksort implementation is in place, that is, no auxillary space is
+used.
+• Note that the test code in main() basically generates a random list. That same
+list is sorted with 4 methods: selection, bubble, merge, and quick sort. Selection
+sort and bubble sort are already implented and display the number of comparisons
+they used, respectively.
+• Ensure that your code also displays how many data comparisons that mergesort
+and quicksort take.
+
