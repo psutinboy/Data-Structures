@@ -59,13 +59,14 @@ void qs(ArrList *list, int start, int end)
 
   int pivot = list->arr[start];
 
-  int pos = end; //pos is searching for the final pivot index
-  for(int i = end - 1; i > start; i--)
+  int pos = start; //pos is searching for the final pivot index
+  for(int i = start + 1; i <= end; i++)
   {
-    if(list->arr[i] > pivot) //means we need to decrement pos
+    quickComps++;
+    if(list->arr[i] < pivot)
     {
+      pos++;
       swap(list, i, pos);
-      pos--;
     }
   }
   swap(list, start, pos);
@@ -75,9 +76,11 @@ void qs(ArrList *list, int start, int end)
 
 }
 
-void quickSort(ArrList *list)
+int quickSort(ArrList *list)
 {
+	quickComps = 0;
 	qs(list, 0, list->N - 1);
+	return quickComps;
 }
 
 void ms(ArrList *list, int start, int end, int *aux) // start and end are inclusive bounds
@@ -107,6 +110,7 @@ void ms(ArrList *list, int start, int end, int *aux) // start and end are inclus
 
   while((pos1 <= mid) && (pos2 <= end))
   {
+    mergeComps++;
     if(aux[pos1] <= aux[pos2])
     {
       list->arr[pos] = aux[pos1];
@@ -130,12 +134,16 @@ void ms(ArrList *list, int start, int end, int *aux) // start and end are inclus
   
 }
 
-void mergeSort(ArrList *list)
+int mergeSort(ArrList *list)
 {
+	mergeComps = 0;
 	// create auxillary space
 	int *aux = malloc(list->N * sizeof(int));
 
 	ms(list, 0, list->N - 1, aux);
+	
+	free(aux);
+	return mergeComps;
 }
 
 int main()
@@ -165,8 +173,8 @@ int main()
 
 	printf("Selection sort comparisons: %d \n", selectionSort(myListS));
 	printf("Bubble sort comparisons: %d \n", bubbleSort(myListB));
-	mergeSort(myListM);
-	quickSort(myListQ);
+	printf("Merge sort comparisons: %d \n", mergeSort(myListM));
+	printf("Quick sort comparisons: %d \n", quickSort(myListQ));
 	
 	printList(myListS);
 
