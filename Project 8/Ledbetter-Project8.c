@@ -43,7 +43,7 @@ void reverse(LinkedList *list);
 
 // sort
 void selectionSort(LinkedList *list);
-void ms(LinkedList *list, int start, int end);
+ListNode *ms(LinkedList *list, int start, int end);
 void mergeSort(LinkedList *list);
 void move(ListNode *nodeToMove, ListNode *newLocation);
 
@@ -73,7 +73,7 @@ LinkedList* newList()
 
 void freeList(LinkedList *list)
 {
-	while (!isEmpty)
+	while (!isEmpty(list))
 		removeAt(list, 0);
 	free(list->start);
 	free(list->end);
@@ -180,11 +180,10 @@ void reverse(LinkedList *list)
 	ListNode *temp;
 	for(int i = -1; i <= list->N; i++)
 	{
-		iterator = iterator->next;
 		temp = iterator->next;
 		iterator->next = iterator->prev;
-
 		iterator->prev = temp;
+		iterator = temp;
 	}
 	temp = list->start;
 	list->start = list->end;
@@ -234,10 +233,10 @@ void move(ListNode *nodeToMove, ListNode *newLocation)
 	nodeToMove->prev->next = nodeToMove->next;
 	nodeToMove->next->prev = nodeToMove->prev;
 
-	newLocation->prev = nodeToMove->prev;
+	nodeToMove->prev = newLocation->prev;
 	nodeToMove->next = newLocation;
 
-	nodeToMove->prev->next = nodeToMove;
+	newLocation->prev->next = nodeToMove;
 	newLocation->prev = nodeToMove;
 }
 
@@ -246,7 +245,7 @@ void move(ListNode *nodeToMove, ListNode *newLocation)
 ListNode *ms(LinkedList *list, int start, int end)
 {
 	if (start >= end)
-		return;
+		return NULL;
 	// missing code
 	int mid = (start + end) / 2;
 
@@ -257,13 +256,13 @@ ListNode *ms(LinkedList *list, int start, int end)
 	//ms(list, mid + 1, end);
 
 	// Merge step
-	int size1 = mid - start - 1;
+	int size1 = mid - start + 1;
 	int size2 = end - mid;
 
 	ListNode *node1 = getNode(list, start);
 	ListNode *node2 = getNode(list, mid + 1);
 
-	while(size1 >= 1 && size2 > 1)
+	while(size1 > 0 && size2 > 0)
 	{
 		if(node1->data > node2->data)
 		{
@@ -314,15 +313,24 @@ int main()
 	//insertAt(my, 1, 5);
 	printList(my);
 
+	printf("Reversing list...(then reversing again)\n");
+	reverse(my);
+	printList(my);
+	reverse(my);
+
+	printf("Moving node 0 to position 3...\n");
 	move(getNode(my, 0), getNode(my, 3));
 	printList(my);
 
-	/*
+	printf("Inserting node 6 at position %d...\n", my->N);
 	insertAt(my, my->N, 6);
 	printList(my);
+	printf("Inserting node 7 at position 4...\n");
 	insertAt(my, 4, 7);
 	printList(my);
+	printf("Removing node at position 3...\n");
 	removeAt(my, 3);
+	printList(my);
 	
 	
 	printf("%d\n", retrieveAt(my, 0));
@@ -338,6 +346,6 @@ int main()
 	mergeSort(my);
 	printList(my);
 	freeList(my);
-*/
+	
 	return 0;
 }

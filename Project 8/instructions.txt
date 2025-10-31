@@ -1,0 +1,8 @@
+Complete the code of the functions in Ledbetter-Project8.c
+– *getNode(LinkedList *list, int index)
+– insertAt(LinkedList *list, int index, int data)
+– removeAt(LinkedList *list, int index)
+– reverse(LinkedList *list) (for reverse, do not swap the data, but work
+directly with the node pointers)
+– move(ListNode *nodeToMove, ListNode *newLocation)
+– ms(LinkedList *list, int start, int end)
