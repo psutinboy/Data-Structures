@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+globs:
+description: simple instructions for class
+---
+
+# Coding Style
+
+- make minimal changes to the code to achieve the goal.
+- keep all code simple.

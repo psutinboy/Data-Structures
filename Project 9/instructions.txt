@@ -1,0 +1,10 @@
+Complete the code of the functions in Ledbetter-Project9.c
+– buildExpressionTree()
+– postOrderTraversal(TreeNode *node)
+– preOrderTraversal(TreeNode *node)
+– inOrderTraversal(TreeNode *node)
+– inOrderTraversal(TreeNode *node)
+– freeMemory()
+• Just have the traversals print the data contents of the node when the node is
+visited.
+• freeMemory() should free the memory allocated to exprTree.
