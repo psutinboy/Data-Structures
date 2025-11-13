@@ -47,10 +47,11 @@ BinaryTree *exprTree;
 
 void getUserInput();
 void buildExpressionTree();
-void postOrderTraversal();
-void preOrderTraversal();
-void inOrderTraversal();
+void postOrderTraversal(TreeNode *node);
+void preOrderTraversal(TreeNode *node);
+void inOrderTraversal(TreeNode *node);
 void freeMemory();
+void freeNode(TreeNode *node);
 
 int isLetter(char ch);
 
