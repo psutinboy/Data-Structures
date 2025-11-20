@@ -1,0 +1,3 @@
+gcc backup.c -o b.exe && b.exe
+gcc back.c -o c.exe && c.exe
+gcc Ledbetter-Project11.c && a.exe

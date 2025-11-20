@@ -84,8 +84,6 @@ void destroyGraph(Graph *graph)
 }
 
 
-
-
 // global variables for simplicity
 int numRecursiveCalls = 0; // records the number of recursive calls;
 int numCyclesFound = 0; // records the total Hamiltonian cycles found
@@ -94,22 +92,6 @@ int currentPath[N]; // stores current path under consideration
 int bestPath[N]; // stores best path found
 int visited[N]; // keep track of we have visited
 int startVertex = 0; // start the search at vertex 0;
-int minEdgeWeight = 0; // minimum edge weight in the graph (for pruning)
-
-void calculateMinEdge()
-{
-	minEdgeWeight = 999999;
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			if (adjMat[i][j] > 0 && adjMat[i][j] < minEdgeWeight)
-			{
-				minEdgeWeight = adjMat[i][j];
-			}
-		}
-	}
-}
 
 //note numVisited keeps track of how many vertices we have visited (basically the depth of the recursion)
 void depthFirst(Graph *graph, int vertex, int numVisited, int currentDistance)
@@ -125,16 +107,8 @@ void depthFirst(Graph *graph, int vertex, int numVisited, int currentDistance)
   */
 
   // added pruning strategy 2 (do better than this)
-  /*
-  if (currentDistance + (N - numVisited) >= bestDistance && numCyclesFound > 0)
-  {
-    return;
-  }
-  */
-
-  // added pruning strategy 3 (improved with minimum edge weight)
   
-  if (currentDistance + minEdgeWeight * (N - numVisited) >= bestDistance && numCyclesFound > 0)
+  if (currentDistance + (N - numVisited) >= bestDistance && numCyclesFound > 0)
   {
     return;
   }
@@ -184,7 +158,6 @@ void printResults();
 int main()
 {
 	Graph *graph = loadGraph();
-	calculateMinEdge();
 
 	//visit startVertex
 //	visited[startVertex] = 1;
