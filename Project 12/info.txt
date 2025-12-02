@@ -5,3 +5,5 @@ Total plans found: 10
 Recursive calls: 1229369
 Length of first plan found: 31
 Length of best plan found: 9
+
+implement pruning via manhattan distance then make moves which decrease the manhattan distance first

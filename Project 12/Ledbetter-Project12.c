@@ -161,7 +161,7 @@ int tryMove(PuzzleState *src, PuzzleState *dest, int moveDir)
             newEmptyCol = src->emptyCol - 1;
             dirName = "Right";
             break;
-        case 3: 
+        case 3:
             newEmptyCol = src->emptyCol + 1;
             dirName = "Left";
             break;
@@ -229,7 +229,9 @@ void depthFirst(PuzzleState *currentState)
                 if (tryMove(currentState, &plan[planSize], moveDir))
                 {
                     // see if it's worth exploring!
-
+                    // if you had the manhattan distance functions
+                    // (plansize + x * manhattan(&plan[planSize]) < bestPlanSize)
+                    // prune if plansize + x * manhattan(&plan[planSize]) >= bestPlanSize
                     if (!planHas(&plan[planSize])
                         && ((numPlanFound == 0) || (planSize + 1 < bestPlanSize)))
                     {
