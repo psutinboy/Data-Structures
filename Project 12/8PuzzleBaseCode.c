@@ -3,7 +3,7 @@
 
 
 
-#define MAX_NUM_STATES 33
+#define MAX_NUM_STATES 100
 
 typedef struct PuzzleState {
     int grid[3][3];
@@ -31,15 +31,14 @@ int bestPlanSize = 0;
 int solvedGrid[3][3] = { {1, 2, 3}, {4, 5, 6}, {7, 8, 0} };
 PuzzleState solvedState;
 
-/* Minimum moves: 09 */
+/* Minimum moves: 31 */
 int startGrid[3][3] = {
-    {1, 3, 6},
-    {5, 2, 8},
-    {4, 0, 7}
+    {6, 4, 7},
+    {8, 5, 0},
+    {3, 2, 1}
 };
-int startEmptyRow = 2;
-int startEmptyCol = 1;
-
+int startEmptyRow = 1;
+int startEmptyCol = 2;
 
 // Function prototypes                                     
 

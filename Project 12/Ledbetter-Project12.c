@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 
-#define MAX_NUM_STATES 32
+#define MAX_NUM_STATES 100
 
 typedef struct PuzzleState {
     int grid[3][3];
@@ -47,6 +48,7 @@ int startEmptyCol = 2;
 void calcIntEquiv(PuzzleState *state);
 int compareTo(PuzzleState *state1, PuzzleState *state2);
 void initPuzzleState(PuzzleState *state, int grid[3][3], int emptyRow, int emptyCol, char *movedTile, char *direction);
+int calculateManhattan(PuzzleState *state);
 
 int planHas(PuzzleState *state);
 void copyNewBestPlan(void);
@@ -102,6 +104,29 @@ void initPuzzleState(PuzzleState *state, int grid[3][3], int emptyRow, int empty
     strcpy(state->movedTile, movedTile);
     strcpy(state->direction, direction);
     calcIntEquiv(state);
+}
+
+int calculateManhattan(PuzzleState *state)
+{
+    int i, j, value;
+    int targetRow, targetCol;
+    int distance = 0;
+
+    for (i = 0; i < 3; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            value = state->grid[i][j];
+            if (value != 0)
+            {
+                targetRow = (value - 1) / 3;
+                targetCol = (value - 1) % 3;
+                distance += abs(i - targetRow) + abs(j - targetCol);
+            }
+        }
+    }
+
+    return distance;
 }
 
 
@@ -200,7 +225,12 @@ int tryMove(PuzzleState *src, PuzzleState *dest, int moveDir)
 // dfs
 void depthFirst(PuzzleState *currentState)
 {
-    int moveDir;
+    int moveDir, i, j;
+    int moveOrder[4];
+    int moveManhattan[4];
+    int numValid = 0;
+    int temp, tempDir;
+    PuzzleState tempState;
 
     if (numRecursiveCalls < maxRecursiveCalls)
     {
@@ -218,9 +248,40 @@ void depthFirst(PuzzleState *currentState)
         }
         else
         {
-            // try each of 4 moves
+            // collect valid moves and their manhattan distances
             for (moveDir = 0; moveDir < 4; moveDir++)
             {
+                if (tryMove(currentState, &tempState, moveDir))
+                {
+                    moveOrder[numValid] = moveDir;
+                    moveManhattan[numValid] = calculateManhattan(&tempState);
+                    numValid++;
+                }
+            }
+
+            // sort moves by manhattan distance (ascending)
+            for (i = 0; i < numValid - 1; i++)
+            {
+                for (j = 0; j < numValid - i - 1; j++)
+                {
+                    if (moveManhattan[j] > moveManhattan[j + 1])
+                    {
+                        temp = moveManhattan[j];
+                        moveManhattan[j] = moveManhattan[j + 1];
+                        moveManhattan[j + 1] = temp;
+
+                        tempDir = moveOrder[j];
+                        moveOrder[j] = moveOrder[j + 1];
+                        moveOrder[j + 1] = tempDir;
+                    }
+                }
+            }
+
+            // try moves in order of best manhattan distance first
+            for (i = 0; i < numValid; i++)
+            {
+                moveDir = moveOrder[i];
+
                 // return if we are at max numb states
                 if (planSize >= MAX_NUM_STATES)
                     continue;
@@ -229,11 +290,9 @@ void depthFirst(PuzzleState *currentState)
                 if (tryMove(currentState, &plan[planSize], moveDir))
                 {
                     // see if it's worth exploring!
-                    // if you had the manhattan distance functions
-                    // (plansize + x * manhattan(&plan[planSize]) < bestPlanSize)
-                    // prune if plansize + x * manhattan(&plan[planSize]) >= bestPlanSize
+                    // prune if plansize + manhattan(&plan[planSize]) >= bestPlanSize
                     if (!planHas(&plan[planSize])
-                        && ((numPlanFound == 0) || (planSize + 1 < bestPlanSize)))
+                        && ((numPlanFound == 0) || (planSize + 1 + calculateManhattan(&plan[planSize]) < bestPlanSize)))
                     {
                         planSize++;
                         depthFirst(&plan[planSize - 1]);
